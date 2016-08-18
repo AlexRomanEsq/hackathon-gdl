@@ -1,0 +1,41 @@
+heat_template_version: 2014-10-16
+description: Ubuntu server 14.04
+parameters:
+  image_id:
+    type: string
+    description: >
+      Ubuntu image
+    default: Ubunutu-14.04
+ 
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image_id}
+      flavor: m1.small
+      key_name: MacBook-Pro
+      networks:
+        - port: { get_resource: port }
+        user_data:
+        str_replace:
+          template: |
+            #!/bin/bash -v
+            apt-get install apache2
+             systemctl restart apache2
+
+ 
+  port:
+    type: OS::Neutron::Port
+    properties:
+      network: selfservice
+ 
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: provider
+ 
+  floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: floating_ip }
+      port_id: { get_resource: port }
