@@ -20,7 +20,7 @@ resources:
         str_replace:
           template: |
             #!/bin/bash -v
-            apt-get install apache2
+            apt-get install -y apache2
              systemctl restart apache2
 
  
