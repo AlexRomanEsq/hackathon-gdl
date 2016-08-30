@@ -25,7 +25,7 @@ resources:
       adjustment_type: change_in_capacity
       auto_scaling_group_id: { get_resource: scaleup_group }
       cooldown: 60
-      scaling_adjustment: -1
+      scaling_adjustment: '-1'
  
   cpu_alarm_high:
     type: OS::Ceilometer::Alarm
