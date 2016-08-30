@@ -1,0 +1,25 @@
+heat_template_version: '2014-10-16'
+parameters:
+  image_id: {default: cirros, description: 'cirros image
+
+      ', type: string}
+resources:
+  floating_ip:
+    properties: {floating_network: provider}
+    type: OS::Neutron::FloatingIP
+  floating_ip_assoc:
+    properties:
+      floatingip_id: {get_resource: floating_ip}
+      port_id: {get_resource: port}
+    type: OS::Neutron::FloatingIPAssociation
+  port:
+    properties: {network: selfservice}
+    type: OS::Neutron::Port
+  server:
+    properties:
+      flavor: m1.tiny
+      image: {get_param: image_id}
+      key_name: MacBook-Pro
+      networks:
+      - port: {get_resource: port}
+    type: OS::Nova::Server
